@@ -1,4 +1,3 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; iss-mode.el --- Mode for InnoSetup install scripts
 
 ;; Copyright (C) 2000-2007 by Stefan Reichoer
@@ -45,9 +44,9 @@
 ;; (setq iss-compiler-path "c:/Programme/Inno Setup 5/")
 ;; (add-hook 'iss-mode-hook 'xsteve-iss-mode-init)
 ;; (defun xsteve-iss-mode-init ()
-;;	 (interactive)
-;;	 (define-key iss-mode-map [f6] 'iss-compile)
-;;	 (define-key iss-mode-map [(meta f6)] 'iss-run-installer)))
+;;  (interactive)
+;;  (define-key iss-mode-map [f6] 'iss-compile)
+;;  (define-key iss-mode-map [(meta f6)] 'iss-run-installer)))
 
 ;; The latest version of iss-mode.el can be found at:
 ;;   http://www.xsteve.at/prg/emacs/iss-mode.el
@@ -84,9 +83,9 @@
 (setq iss-font-lock-keywords
   (list
    (cons (concat "^;\.*")
-	 'font-lock-comment-face)
+    'font-lock-comment-face)
    (cons (concat "\\sw+: ")
-	 'font-lock-keyword-face)
+    'font-lock-keyword-face)
    (cons "^[ \t]*\\[\.+\\]" 'font-lock-function-name-face) ;font-lock-constant-face)
    (cons "^[ \t]*#include[ \t]*\".+\"" 'font-lock-preprocessor-face)
    (cons (concat "^[ \t]*\\<\\(appname\\|appvername\\|appversion\\|appcopyright\\|appid\\|"
@@ -94,14 +93,14 @@
                  "\\|defaultgroupname\\|minversion\\|outputdir\\|outputbasefilename\\|"
                  "allownoicons\\|uninstallfilesdir\\|"
                  "sourcedir\\|disableprogramgrouppage\\|alwayscreateuninstallicon\\)\\>")
-	 'font-lock-type-face)
+    'font-lock-type-face)
    (cons (concat "\\<\\(alwaysskipifsameorolder\\|uninsneveruninstall\\|"
                  "comparetimestampalso\\|restartreplace\\|isreadme\\|"
                  "unchecked\\|nowait\\|postinstall\\|skipifsilent\\|ignoreversion\\|"
                  "uninsdeletekeyifempty\\|uninsdeletekey\\)\\>")
-	 'font-lock-variable-name-face)
+    'font-lock-variable-name-face)
    (cons (concat "\\<\\(HKCU\\|HKLM\\|dirifempty\\|files\\|filesandordirs\\)\\>")
-	 'font-lock-constant-face)))
+    'font-lock-constant-face)))
 
 (defvar iss-mode-map () "Keymap used in iss-mode buffers.")
 
@@ -190,3 +189,4 @@
 (provide 'iss-mode)
 
 ;; arch-tag: b07b7119-d591-465e-927f-d0be0bcf7cab
+;;; iss-mode.el ends here
