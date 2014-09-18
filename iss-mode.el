@@ -89,8 +89,10 @@
    (cons "^[ \t]*\\[\.+\\]" 'font-lock-function-name-face) ;font-lock-constant-face)
    (cons "^[ \t]*#include[ \t]*\".+\"" 'font-lock-preprocessor-face)
    (cons (concat "^[ \t]*\\<\\(appname\\|appvername\\|appversion\\|appcopyright\\|appid\\|"
-                 "appmutex\\|beveledlabel\\|defaultdirname\\|versioninfoversion"
-                 "\\|defaultgroupname\\|minversion\\|outputdir\\|outputbasefilename\\|"
+                 "appmutex\\|beveledlabel\\|defaultdirname\\|versioninfoversion\\|"
+                 "apppublisher\\|apppublisherurl\\|appsupporturl\\|appupdatesurl\\|"
+                 "licensefile\\|compression\\|solidcompression\\|changesassociations\\|"
+                 "defaultgroupname\\|minversion\\|outputdir\\|outputbasefilename\\|"
                  "allownoicons\\|uninstallfilesdir\\|"
                  "sourcedir\\|disableprogramgrouppage\\|alwayscreateuninstallicon\\)\\>")
     'font-lock-type-face)
