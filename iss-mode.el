@@ -120,6 +120,7 @@
 (defalias 'iss-mode-parent-mode
   (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
 
+;;;###autoload
 (define-derived-mode iss-mode iss-mode-parent-mode "ISS"
   "Major mode for editing InnoSetup script files."
   (set-syntax-table iss-mode-syntax-table)
