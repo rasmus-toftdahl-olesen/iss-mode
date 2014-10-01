@@ -56,6 +56,8 @@
 ;;; Code:
 
 (defvar iss-compiler-path nil "Path to the iss compiler")
+(eval-when-compile
+  (require 'compile))
 
 ;;; End of user settings
 
