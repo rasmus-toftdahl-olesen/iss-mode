@@ -169,6 +169,7 @@
         (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))
 
 (defun iss-run-installer ()
+  "Run the installer executable."
   (interactive)
   (let ((executable
          (concat (or (iss-find-option "outputdir") "Output\\")
