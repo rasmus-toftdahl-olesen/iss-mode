@@ -129,8 +129,6 @@
 
   (set (make-local-variable 'compilation-error-regexp-alist)
         '(("\\(Error on line\\) \\([0-9]+\\):" nil 2)))
-  (set (make-local-variable 'compilation-file-regexp-alist)
-          '(("iscc \\(.*\\)$" 1)))
 
   ;; Font lock support
   (setq font-lock-defaults '(iss-font-lock-keywords nil t)))
