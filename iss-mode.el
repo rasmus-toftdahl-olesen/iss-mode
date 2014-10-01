@@ -39,8 +39,7 @@
 ;; Of course you can bind this commands to keys (e.g. in the iss-mode-hook)
 
 ;; My initialization for InnoSetup looks like this:
-;; (autoload 'iss-mode "iss-mode" "Innosetup Script Mode" t)
-;; (setq auto-mode-alist (append '(("\\.iss$"  . iss-mode)) auto-mode-alist))
+;; (add-to-list 'auto-mode-alist '(("\\.iss$"  . iss-mode)))
 ;; (setq iss-compiler-path "c:/Programme/Inno Setup 5/")
 ;; (add-hook 'iss-mode-hook 'xsteve-iss-mode-init)
 ;; (defun xsteve-iss-mode-init ()
