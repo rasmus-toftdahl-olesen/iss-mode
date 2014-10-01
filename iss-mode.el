@@ -166,7 +166,7 @@
     (save-excursion
       (goto-char (point-min))
       (when (search-forward-regexp search-regexp nil t)
-            (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))
+        (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))
 
 (defun iss-run-installer ()
   (interactive)
