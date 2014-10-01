@@ -22,7 +22,7 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;;; Commentary
+;;; Commentary:
 
 ;; InnoSetup is an Application Installer for Windows
 ;; See: http://www.jrsoftware.org/isinfo.php
@@ -39,8 +39,7 @@
 ;; Of course you can bind this commands to keys (e.g. in the iss-mode-hook)
 
 ;; My initialization for InnoSetup looks like this:
-;; (autoload 'iss-mode "iss-mode" "Innosetup Script Mode" t)
-;; (setq auto-mode-alist (append '(("\\.iss$"  . iss-mode)) auto-mode-alist))
+;; (add-to-list 'auto-mode-alist '(("\\.iss$"  . iss-mode)))
 ;; (setq iss-compiler-path "c:/Programme/Inno Setup 5/")
 ;; (add-hook 'iss-mode-hook 'xsteve-iss-mode-init)
 ;; (defun xsteve-iss-mode-init ()
@@ -55,37 +54,32 @@
 
 ;;; Code:
 
-(defvar iss-compiler-path nil "Path to the iss compiler")
+(eval-when-compile
+  (require 'compile))
+
+(defvar iss-compiler-path nil "Path to the iss compiler.")
 
 ;;; End of user settings
 
-(defvar iss-mode-syntax-table nil
+(defvar iss-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    ;; ";" starts a comment
+    (modify-syntax-entry ?\; ". 12" table)
+    ;; and \n and \^M end a comment
+    (modify-syntax-entry ?\n ">"    table)
+    (modify-syntax-entry ?\^M ">"   table)
+    (modify-syntax-entry ?\" "."   table)
+    (modify-syntax-entry ?_ "w"    table)
+    table)
   "Syntax table in use in iss-mode buffers.")
 
-(if iss-mode-syntax-table
-    ()
-  (setq iss-mode-syntax-table (make-syntax-table))
 
-  ; ";" starts a comment
-  ;(modify-syntax-entry ?\; "<" iss-mode-syntax-table)
-  (modify-syntax-entry ?\; ". 12" iss-mode-syntax-table)
-  ;; and \n and \^M end a comment
-  (modify-syntax-entry ?\n ">"    iss-mode-syntax-table)
-  (modify-syntax-entry ?\^M ">"   iss-mode-syntax-table)
-
-  (modify-syntax-entry ?\" "."   iss-mode-syntax-table)
-
-  (modify-syntax-entry ?_ "w"    iss-mode-syntax-table))
-
-
-(defvar iss-font-lock-keywords nil "Expressions to highlight in iss mode.")
-
-(setq iss-font-lock-keywords
+(defvar iss-font-lock-keywords
   (list
    (cons (concat "^;\.*")
-    'font-lock-comment-face)
+         'font-lock-comment-face)
    (cons (concat "\\sw+: ")
-    'font-lock-keyword-face)
+         'font-lock-keyword-face)
    (cons "^[ \t]*\\[\.+\\]" 'font-lock-function-name-face) ;font-lock-constant-face)
    (cons "^[ \t]*#include[ \t]*\".+\"" 'font-lock-preprocessor-face)
    (cons (concat "^[ \t]*\\<\\(appname\\|appvername\\|appversion\\|appcopyright\\|appid\\|"
@@ -95,19 +89,19 @@
                  "defaultgroupname\\|minversion\\|outputdir\\|outputbasefilename\\|"
                  "allownoicons\\|uninstallfilesdir\\|"
                  "sourcedir\\|disableprogramgrouppage\\|alwayscreateuninstallicon\\)\\>")
-    'font-lock-type-face)
+         'font-lock-type-face)
    (cons (concat "\\<\\(alwaysskipifsameorolder\\|uninsneveruninstall\\|"
                  "comparetimestampalso\\|restartreplace\\|isreadme\\|"
                  "unchecked\\|nowait\\|postinstall\\|skipifsilent\\|ignoreversion\\|"
                  "uninsdeletekeyifempty\\|uninsdeletekey\\)\\>")
-    'font-lock-variable-name-face)
+         'font-lock-variable-name-face)
    (cons (concat "\\<\\(HKCU\\|HKLM\\|dirifempty\\|files\\|filesandordirs\\)\\>")
-    'font-lock-constant-face)))
+         'font-lock-constant-face))
+  "Expressions to highlight in iss mode.")
 
-(defvar iss-mode-map () "Keymap used in iss-mode buffers.")
 
-(cond ((not iss-mode-map)
-       (setq iss-mode-map (make-sparse-keymap))))
+(defvar iss-mode-map (make-sparse-keymap)
+  "Keymap used in iss-mode buffers.")
 
 (easy-menu-define
  iss-menu
@@ -122,13 +116,12 @@
 (easy-menu-add iss-menu)
 
 
-(defun iss-mode ()
-  "Major mode for editing InnoSetup script files. Upon startup iss-mode-hook is run."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map iss-mode-map)
-  (setq major-mode 'iss-mode)
-  (setq mode-name "iss")
+(defalias 'iss-mode-parent-mode
+  (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
+
+;;;###autoload
+(define-derived-mode iss-mode iss-mode-parent-mode "ISS"
+  "Major mode for editing InnoSetup script files."
   (set-syntax-table iss-mode-syntax-table)
   (set (make-local-variable 'comment-start) ";")
   (set (make-local-variable 'comment-end) "")
@@ -136,22 +129,18 @@
 
   (set (make-local-variable 'compilation-error-regexp-alist)
         '(("\\(Error on line\\) \\([0-9]+\\):" nil 2)))
-  (set (make-local-variable 'compilation-file-regexp-alist)
-          '(("iscc \\(.*\\)$" 1)))
 
   ;; Font lock support
-  (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults '(iss-font-lock-keywords nil t))
-  (run-hooks 'iss-mode-hook))
+  (setq font-lock-defaults '(iss-font-lock-keywords nil t)))
 
 (defun iss-compiler-help ()
-  "Start the online documentation for the InnoSetup compiler"
+  "Start the online documentation for the InnoSetup compiler."
   (interactive)
   (let ((default-directory (or iss-compiler-path default-directory)))
     (w32-shell-execute 1 "ISetup.chm")))
 
 (defun iss-compile ()
-  "Compile the actual file with the InnoSetup compiler"
+  "Compile the actual file with the InnoSetup compiler."
   (interactive)
   (let ((default-directory (or iss-compiler-path default-directory))
         (compilation-process-setup-function 'iss-process-setup))
@@ -163,7 +152,6 @@
        'iss-compilation-exit-message-function))
 
 (defun iss-compilation-exit-message-function (process-status exit-status msg)
-  (interactive)
   (save-excursion
     (let ((buffer-read-only nil))
       (goto-char (point-min))
@@ -178,9 +166,10 @@
     (save-excursion
       (goto-char (point-min))
       (when (search-forward-regexp search-regexp nil t)
-            (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))
+        (buffer-substring-no-properties (match-beginning 1) (match-end 1))))))
 
 (defun iss-run-installer ()
+  "Run the installer executable."
   (interactive)
   (let ((executable
          (concat (or (iss-find-option "outputdir") "Output\\")
