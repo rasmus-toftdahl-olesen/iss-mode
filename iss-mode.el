@@ -152,7 +152,6 @@
        'iss-compilation-exit-message-function))
 
 (defun iss-compilation-exit-message-function (process-status exit-status msg)
-  (interactive)
   (save-excursion
     (let ((buffer-read-only nil))
       (goto-char (point-min))
